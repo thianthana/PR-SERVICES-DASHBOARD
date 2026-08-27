@@ -3,37 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — ระบบงานประชาสัมพันธ์</title>
+    <title>Dashboard — ระบบงานประชาสัมพันธ์ (Light Theme)</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Prompt', sans-serif; background-color: #07090f; margin: 0; min-height: 100vh; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; color: #334155; margin: 0; min-height: 100vh; overflow-x: hidden; }
         
-        .liquid-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -1; overflow: hidden; background: #07090f; }
+        /* ของเหลวโทนสว่างพาสเทล */
+        .liquid-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -1; overflow: hidden; background: #f0f4f8; }
         .blob { position: absolute; filter: blur(80px); opacity: 0.6; animation: move-liquid 25s infinite alternate ease-in-out; }
-        .blob-1 { width: 40vw; height: 40vw; background: linear-gradient(135deg, #a855f7, #6366f1); top: -15%; left: -5%; border-radius: 43% 57% 70% 30% / 44% 45% 55% 56%; animation-duration: 30s; }
-        .blob-2 { width: 35vw; height: 35vw; background: linear-gradient(135deg, #0ea5e9, #3b82f6); bottom: -15%; right: -5%; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation-duration: 28s; animation-delay: -5s; }
-        .blob-3 { width: 25vw; height: 25vw; background: linear-gradient(135deg, #d946ef, #8b5cf6); top: 50%; left: 50%; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation-duration: 22s; animation-delay: -10s; }
+        .blob-1 { width: 40vw; height: 40vw; background: linear-gradient(135deg, #fbcfe8, #bfdbfe); top: -15%; left: -5%; border-radius: 43% 57% 70% 30% / 44% 45% 55% 56%; animation-duration: 30s; }
+        .blob-2 { width: 35vw; height: 35vw; background: linear-gradient(135deg, #a7f3d0, #bae6fd); bottom: -15%; right: -5%; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation-duration: 28s; animation-delay: -5s; }
+        .blob-3 { width: 25vw; height: 25vw; background: linear-gradient(135deg, #e9d5ff, #fbcfe8); top: 50%; left: 50%; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation-duration: 22s; animation-delay: -10s; }
         @keyframes move-liquid { 0% { transform: translate(0, 0) rotate(0deg) scale(1); } 33% { transform: translate(8vw, -10vh) rotate(90deg) scale(1.1); } 66% { transform: translate(-8vw, 10vh) rotate(180deg) scale(0.9); } 100% { transform: translate(4vw, 4vh) rotate(360deg) scale(1); } }
 
-        .glass { background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-card { background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-top: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-        .glass-card:hover { background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%); border-color: rgba(255, 255, 255, 0.25); transform: translateY(-8px) scale(1.02); box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(168, 85, 247, 0.15); }
-        .glass-card:active { transform: translateY(-2px) scale(0.98); }
+        /* กระจกใสสำหรับธีมสว่าง */
+        .glass-panel { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05); }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .glass-card:hover { background: rgba(255, 255, 255, 0.95); transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 0 30px rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3); }
 
-        /* Loading screen */
-        #authLoading { transition: opacity 0.5s ease; }
-        #mainContent { opacity: 0; transition: opacity 0.6s ease; }
-        #mainContent.loaded { opacity: 1; }
+        /* ช่อง Input ธีมสว่าง */
+        .light-input { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(203, 213, 225, 0.8); color: #1e293b; transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .light-input:focus { background: #fff; border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15); outline: none; }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        /* ปุ่มกดธีมสว่าง */
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #6366f1); color: white; transition: all 0.3s ease; box-shadow: 0 4px 15px -3px rgba(99, 102, 241, 0.4); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -3px rgba(99, 102, 241, 0.5); }
+        
+        .btn-danger { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; transition: all 0.3s; }
+        .btn-danger:hover { background: #fee2e2; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
 
-        .liquid-btn-danger { background: linear-gradient(135deg, rgba(239,68,68,0.9), rgba(220,38,38,0.8)); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px -5px rgba(239,68,68,0.4); transition: all 0.3s ease; }
-        .liquid-btn-danger:hover { transform: translateY(-2px); box-shadow: 0 12px 25px -5px rgba(239,68,68,0.5); }
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        
+        /* Modal Transition */
+        .modal-active { opacity: 1; pointer-events: auto; }
+        .modal-inactive { opacity: 0; pointer-events: none; }
+        .modal-content-active { transform: scale(1); }
+        .modal-content-inactive { transform: scale(0.95); }
+
+        /* Custom Scrollbar สำหรับ Table */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="min-h-screen text-white">
+<body class="min-h-screen text-slate-800">
 
     <div class="liquid-container">
         <div class="blob blob-1"></div>
@@ -41,147 +58,376 @@
         <div class="blob blob-3"></div>
     </div>
 
-    <!-- Auth Loading Screen -->
-    <div id="authLoading" class="fixed inset-0 z-[100] bg-[#07090f] flex items-center justify-center">
-        <div class="flex flex-col items-center">
-            <div class="w-16 h-16 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-xl mb-6 animate-pulse">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            </div>
-            <p class="text-lg font-medium text-white mb-2">กำลังตรวจสอบสิทธิ์การเข้าถึง</p>
-            <p class="text-xs text-gray-400 uppercase tracking-widest">Verifying Authorization</p>
-            <svg class="w-6 h-6 animate-spin text-indigo-400 mt-6" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-        </div>
-    </div>
+    <div id="toastContainer" class="fixed top-5 right-5 z-[150] flex flex-col gap-3"></div>
 
     <!-- Main Content -->
     <div id="mainContent" class="relative z-10">
+        
         <!-- Header -->
-        <header class="glass border-b border-white/5 sticky top-0 z-50">
+        <header class="glass-panel border-b border-white/50 sticky top-0 z-40">
             <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+                <!-- Logo -->
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-indigo-500 flex items-center justify-center shadow-md">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                     </div>
                     <div>
-                        <h1 class="text-lg font-semibold leading-tight">ระบบงานประชาสัมพันธ์</h1>
-                        <p class="text-[10px] text-indigo-300 uppercase tracking-[0.2em] opacity-80">CMU Library PR Portal</p>
+                        <h1 class="text-lg font-semibold text-slate-800 leading-tight">ระบบงานประชาสัมพันธ์</h1>
+                        <p class="text-[10px] text-indigo-500 uppercase tracking-[0.2em] font-medium">CMU Library PR Portal</p>
                     </div>
                 </div>
+
+                <!-- User Action -->
                 <div class="flex items-center gap-4">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-sm font-medium text-white" id="headerDisplayName">—</p>
-                        <p class="text-[10px] text-gray-400 uppercase tracking-wider" id="headerRole">—</p>
+                    <!-- Admin Badge Indicator -->
+                    <div class="hidden sm:flex items-center px-3 py-1 bg-fuchsia-100 text-fuchsia-600 rounded-full border border-fuchsia-200 text-xs font-medium">
+                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        ผู้ดูแลระบบ (Admin)
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-500/30 to-indigo-500/30 border border-white/15 flex items-center justify-center text-sm font-semibold" id="headerAvatar">?</div>
-                    <button onclick="handleLogout()" class="liquid-btn-danger px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2" title="ออกจากระบบ">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        <span class="hidden sm:inline">ออกจากระบบ</span>
+
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-semibold text-slate-700">คุณเทียนรวิชญ์</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-wider">pr_admin@cmu.ac.th</p>
+                    </div>
+
+                    <!-- Profile Avatar (Clickable) -->
+                    <button onclick="toggleModal('profileModal')" class="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-100 to-indigo-100 border-2 border-white flex items-center justify-center text-sm font-semibold text-indigo-700 shadow-sm hover:scale-105 transition-transform" title="ตั้งค่าโปรไฟล์">
+                        ท
+                    </button>
+
+                    <button onclick="handleLogout()" class="btn-danger w-10 h-10 rounded-xl flex items-center justify-center" title="ออกจากระบบ">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- Dashboard Content -->
-        <main class="max-w-6xl mx-auto px-6 py-10">
+        <main class="max-w-6xl mx-auto px-6 py-8">
+            
             <!-- Welcome Section -->
-            <div class="mb-12 fade-in-up" style="animation-delay: 0.1s">
-                <h2 class="text-3xl font-semibold mb-2">สวัสดี, <span id="welcomeName" class="text-fuchsia-400">—</span></h2>
-                <p class="text-gray-400 font-light">เลือกบริการที่ต้องการใช้งาน</p>
+            <div class="mb-8 fade-in-up" style="animation-delay: 0.1s">
+                <h2 class="text-3xl font-semibold mb-2 text-slate-800">ยินดีต้อนรับ, <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-indigo-500">แอดมินเทียนรวิชญ์</span> ✨</h2>
+                <p class="text-slate-500 font-light">จัดการบริการและคำขอเข้าใช้งานของระบบประชาสัมพันธ์</p>
             </div>
 
-            <!-- Session Status -->
-            <div class="glass rounded-2xl p-4 mb-10 flex items-center gap-4 fade-in-up" style="animation-delay: 0.2s">
-                <div class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)] animate-pulse flex-shrink-0"></div>
-                <div class="flex-1">
-                    <p class="text-sm text-gray-300 font-light">เซสชันปลอดภัย — Single Session Enforcement เปิดอยู่ | Timeout: 15 นาที</p>
-                </div>
-                <div class="text-xs text-gray-500 font-mono" id="sessionTimer">—</div>
-            </div>
-
-            <!-- Service Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <!-- Card 1: วิเคราะห์สื่อออนไลน์ -->
-                <div class="glass-card rounded-3xl p-8 fade-in-up" style="animation-delay: 0.3s" onclick="navigateTo('service-media.html')">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center mb-6">
-                        <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">วิเคราะห์ข้อมูลสื่อออนไลน์</h3>
-                    <p class="text-[10px] text-cyan-300/70 uppercase tracking-[0.2em] mb-4">Online Media Analytics</p>
-                    <p class="text-sm text-gray-400 font-light leading-relaxed">วิเคราะห์และรายงานผลข้อมูลสื่อออนไลน์ทุกช่องทาง ทั้ง Facebook, Instagram, Website และอื่นๆ ที่เกี่ยวข้อง</p>
-                    <div class="mt-6 flex items-center text-cyan-400 text-sm font-medium">
-                        เข้าใช้งาน
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                    </div>
+            <!-- Admin Section: จัดการคำขอ (เฉพาะ Admin) -->
+            <div class="mb-10 fade-in-up" style="animation-delay: 0.2s">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold flex items-center text-slate-700">
+                        <svg class="w-5 h-5 mr-2 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        รายการรออนุมัติ <span class="ml-2 bg-amber-100 text-amber-600 py-0.5 px-2.5 rounded-full text-xs">2 คำขอใหม่</span>
+                    </h3>
+                    <button onclick="toggleModal('approvalModal')" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 underline underline-offset-4">จัดการทั้งหมด</button>
                 </div>
 
-                <!-- Card 2: วิเคราะห์แบบสอบถาม -->
-                <div class="glass-card rounded-3xl p-8 fade-in-up" style="animation-delay: 0.4s" onclick="navigateTo('service-survey.html')">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30 flex items-center justify-center mb-6">
-                        <svg class="w-7 h-7 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                <!-- Preview คำขอเล็กๆ หน้าแดชบอร์ด -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-card rounded-2xl p-5 flex items-center justify-between" id="reqCard-1">
+                        <div>
+                            <p class="font-medium text-slate-800 text-sm">สมหญิง รักดี (จนท. ประชาสัมพันธ์)</p>
+                            <p class="text-xs text-slate-500 mt-1">somying.r@cmu.ac.th</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="approveRequest(1)" class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center hover:bg-emerald-200 transition-colors" title="อนุมัติ"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></button>
+                            <button onclick="rejectRequest(1)" class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center hover:bg-rose-200 transition-colors" title="ปฏิเสธ"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">วิเคราะห์ข้อมูลแบบสอบถาม</h3>
-                    <p class="text-[10px] text-fuchsia-300/70 uppercase tracking-[0.2em] mb-4">Survey Data Analytics</p>
-                    <p class="text-sm text-gray-400 font-light leading-relaxed">นำเข้าข้อมูลจากแบบสอบถาม วิเคราะห์ผล สร้างกราฟ แปลผล และสรุปรายงานอัตโนมัติ</p>
-                    <div class="mt-6 flex items-center text-fuchsia-400 text-sm font-medium">
-                        เข้าใช้งาน
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    <div class="glass-card rounded-2xl p-5 flex items-center justify-between" id="reqCard-2">
+                        <div>
+                            <p class="font-medium text-slate-800 text-sm">นายสมชาย ขยัน (นศ. ฝึกงาน)</p>
+                            <p class="text-xs text-slate-500 mt-1">somchai.k@cmu.ac.th</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="approveRequest(2)" class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center hover:bg-emerald-200 transition-colors" title="อนุมัติ"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></button>
+                            <button onclick="rejectRequest(2)" class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center hover:bg-rose-200 transition-colors" title="ปฏิเสธ"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Service Cards Grid -->
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold flex items-center text-slate-700 mb-4">
+                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    บริการในระบบ (Services)
+                </h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="serviceGrid">
+
+                <!-- Card 1 -->
+                <div class="glass-card rounded-3xl p-6 fade-in-up flex flex-col" style="animation-delay: 0.3s" onclick="window.location.href='service-media.html'">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-100 border border-cyan-200 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">วิเคราะห์ข้อมูลสื่อออนไลน์</h3>
+                    <p class="text-[10px] text-cyan-500 uppercase tracking-[0.1em] mb-3">Online Media Analytics</p>
+                    <p class="text-xs text-slate-500 font-light leading-relaxed flex-1">วิเคราะห์ผลข้อมูลสื่อออนไลน์ช่องทาง Facebook, Instagram, Website</p>
+                    <div class="mt-4 flex items-center text-indigo-600 text-xs font-semibold">
+                        เข้าใช้งาน <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card rounded-3xl p-6 fade-in-up flex flex-col" style="animation-delay: 0.4s" onclick="window.location.href='service-survey.html'">
+                    <div class="w-12 h-12 rounded-2xl bg-fuchsia-100 border border-fuchsia-200 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">วิเคราะห์ข้อมูลแบบสอบถาม</h3>
+                    <p class="text-[10px] text-fuchsia-500 uppercase tracking-[0.1em] mb-3">Survey Data Analytics</p>
+                    <p class="text-xs text-slate-500 font-light leading-relaxed flex-1">นำเข้าข้อมูลจากแบบสอบถาม วิเคราะห์ผลและสร้างกราฟอัตโนมัติ</p>
+                    <div class="mt-4 flex items-center text-indigo-600 text-xs font-semibold">
+                        เข้าใช้งาน <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Card 3: ปุ่มเพิ่มเมนูใหม่ (Admin Only) -->
+                <div onclick="toggleModal('addMenuModal')" class="border-2 border-dashed border-slate-300 rounded-3xl p-6 fade-in-up flex flex-col items-center justify-center text-center hover:border-indigo-400 hover:bg-indigo-50/50 transition-colors cursor-pointer group" style="animation-delay: 0.5s">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors text-slate-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                    <h3 class="text-sm font-semibold text-slate-600 group-hover:text-indigo-600">เพิ่มบริการใหม่</h3>
+                    <p class="text-[10px] text-slate-400 mt-1">สร้างทางลัดเมนูบน Dashboard</p>
                 </div>
 
             </div>
 
-            <!-- Footer Info -->
-            <div class="mt-16 text-center fade-in-up" style="animation-delay: 0.6s">
-                <p class="text-xs text-gray-600 font-light">ระบบงานประชาสัมพันธ์ สำนักหอสมุด มหาวิทยาลัยเชียงใหม่</p>
-                <p class="text-[10px] text-gray-700 mt-1 uppercase tracking-widest">CMU Library PR Portal — Secured System</p>
-            </div>
         </main>
     </div>
 
-    <script src="js/config.js"></script>
-    <script src="js/auth.js"></script>
+    <!-- ==============================================
+         MODALS (หน้าต่าง Pop-up ต่างๆ)
+    =============================================== -->
+
+    <!-- 1. Profile Setting Modal -->
+    <div id="profileModal" class="fixed inset-0 z-[120] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300 modal-inactive">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative transition-transform duration-300 modal-content-inactive">
+            <button onclick="toggleModal('profileModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 class="text-xl font-bold text-slate-800 mb-1">ตั้งค่าโปรไฟล์</h3>
+            <p class="text-xs text-slate-500 mb-6">แก้ไขข้อมูลส่วนตัวและระบบความปลอดภัย</p>
+
+            <form onsubmit="event.preventDefault(); showToast('บันทึกข้อมูลโปรไฟล์เรียบร้อย', 'success'); toggleModal('profileModal');" class="space-y-4 text-left">
+                <div>
+                    <label class="text-xs text-slate-600 font-medium mb-1 block">ชื่อแสดงผล</label>
+                    <input type="text" value="แอดมินเทียนรวิชญ์" class="light-input w-full px-4 py-3 rounded-xl text-sm font-medium">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-600 font-medium mb-1 block">อีเมลสำหรับรับ OTP <span class="text-rose-500">*</span></label>
+                    <input type="email" value="pr_admin@cmu.ac.th" required class="light-input w-full px-4 py-3 rounded-xl text-sm font-medium">
+                    <p class="text-[10px] text-slate-400 mt-1">รหัสความปลอดภัยจะถูกส่งไปยังอีเมลนี้</p>
+                </div>
+                
+                <div class="border-t border-slate-200 pt-4 mt-2">
+                    <label class="text-xs text-slate-600 font-medium mb-1 block">รหัสผ่านใหม่ (ปล่อยว่างหากไม่ต้องการเปลี่ยน)</label>
+                    <input type="password" placeholder="••••••••" class="light-input w-full px-4 py-3 rounded-xl text-sm mb-3">
+                    <input type="password" placeholder="ยืนยันรหัสผ่านใหม่" class="light-input w-full px-4 py-3 rounded-xl text-sm">
+                </div>
+                
+                <button type="submit" class="btn-primary w-full py-3.5 rounded-xl text-sm font-semibold mt-4">บันทึกการเปลี่ยนแปลง</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Approval Request Modal (จัดการคำขอทั้งหมด) -->
+    <div id="approvalModal" class="fixed inset-0 z-[120] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300 modal-inactive">
+        <div class="glass-panel w-full max-w-3xl p-8 rounded-3xl relative transition-transform duration-300 modal-content-inactive max-h-[90vh] flex flex-col">
+            <button onclick="toggleModal('approvalModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h3 class="text-xl font-bold text-slate-800 mb-1 flex items-center">
+                จัดการคำขอเข้าใช้งาน
+                <span class="ml-3 bg-amber-100 text-amber-600 py-1 px-3 rounded-full text-xs font-semibold">2 รออนุมัติ</span>
+            </h3>
+            <p class="text-xs text-slate-500 mb-6">อนุมัติเพื่อสร้างรหัสผู้ใช้งานและส่งข้อมูลผ่านอีเมลโดยอัตโนมัติ</p>
+
+            <div class="overflow-y-auto pr-2 flex-1">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-xs text-slate-500">
+                            <th class="pb-3 font-medium">ชื่อ-นามสกุล / อีเมล</th>
+                            <th class="pb-3 font-medium">ตำแหน่ง</th>
+                            <th class="pb-3 font-medium">วัตถุประสงค์</th>
+                            <th class="pb-3 font-medium text-center">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <!-- รายการที่ 1 -->
+                        <tr class="border-b border-slate-100" id="tableReq-1">
+                            <td class="py-4">
+                                <p class="font-semibold text-slate-800">สมหญิง รักดี</p>
+                                <p class="text-[11px] text-indigo-600">somying.r@cmu.ac.th</p>
+                            </td>
+                            <td class="py-4 text-slate-600">จนท. ประชาสัมพันธ์</td>
+                            <td class="py-4 text-slate-500 text-xs w-1/3">ต้องการนำข้อมูลไปทำรายงานประจำเดือน</td>
+                            <td class="py-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <button onclick="approveRequest(1)" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-medium transition-colors shadow-sm">อนุมัติ</button>
+                                    <button onclick="rejectRequest(1)" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-lg text-xs font-medium transition-colors">ปฏิเสธ</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- รายการที่ 2 -->
+                        <tr class="border-b border-slate-100" id="tableReq-2">
+                            <td class="py-4">
+                                <p class="font-semibold text-slate-800">นายสมชาย ขยัน</p>
+                                <p class="text-[11px] text-indigo-600">somchai.k@cmu.ac.th</p>
+                            </td>
+                            <td class="py-4 text-slate-600">นักศึกษาฝึกงาน</td>
+                            <td class="py-4 text-slate-500 text-xs w-1/3">ขอสิทธิ์ชั่วคราวเพื่อทำโปรเจกต์ส่งอาจารย์</td>
+                            <td class="py-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <button onclick="approveRequest(2)" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-medium transition-colors shadow-sm">อนุมัติ</button>
+                                    <button onclick="rejectRequest(2)" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-lg text-xs font-medium transition-colors">ปฏิเสธ</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="emptyReq" class="hidden text-center py-10">
+                    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <p class="text-slate-500 text-sm">ไม่มีคำขอที่รอการอนุมัติแล้ว</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Add Menu Modal -->
+    <div id="addMenuModal" class="fixed inset-0 z-[120] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300 modal-inactive">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative transition-transform duration-300 modal-content-inactive">
+            <button onclick="toggleModal('addMenuModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 class="text-xl font-bold text-slate-800 mb-1 flex items-center">
+                <div class="w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mr-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg></div>
+                เพิ่มเมนูบริการ
+            </h3>
+            <p class="text-xs text-slate-500 mb-6">สร้างทางลัดไปยังระบบอื่นๆ บนหน้า Dashboard</p>
+
+            <form id="addMenuForm" class="space-y-4 text-left">
+                <div>
+                    <label class="text-xs text-slate-600 font-medium mb-1 block">ชื่อบริการ <span class="text-rose-500">*</span></label>
+                    <input type="text" id="newMenuName" required placeholder="เช่น รายงานประจำปี" class="light-input w-full px-4 py-3 rounded-xl text-sm font-medium">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-600 font-medium mb-1 block">รายละเอียดแบบย่อ</label>
+                    <textarea id="newMenuDesc" rows="2" placeholder="อธิบายบริการสั้นๆ..." class="light-input w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs text-slate-600 font-medium mb-1 block">ลิงก์ URL (ปลายทาง) <span class="text-rose-500">*</span></label>
+                    <input type="url" id="newMenuUrl" required placeholder="https://..." class="light-input w-full px-4 py-3 rounded-xl text-sm font-medium">
+                </div>
+                
+                <button type="submit" class="btn-primary w-full py-3.5 rounded-xl text-sm font-semibold mt-4">สร้างเมนูทันที</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script>
-        // ===== Auth Guard =====
-        (async function() {
-            const authOk = await Auth.requireAuth();
-            if (!authOk) return; // จะ redirect ไปหน้า login แล้ว
+        // ระบบ Toast แจ้งเตือน 
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            let iconColor, borderColor;
+            
+            if(type === 'warning') { iconColor = 'text-amber-500'; borderColor = 'border-amber-200'; }
+            else if(type === 'error') { iconColor = 'text-rose-500'; borderColor = 'border-rose-200'; }
+            else { iconColor = 'text-emerald-500'; borderColor = 'border-emerald-200'; }
 
-            // Auth ผ่าน — แสดง dashboard
-            const session = Auth.getSession();
-            document.getElementById('headerDisplayName').textContent = session.displayName || session.username;
-            document.getElementById('headerRole').textContent = session.role === 'admin' ? 'ผู้ดูแลระบบ' : 'ผู้ใช้งาน';
-            document.getElementById('headerAvatar').textContent = (session.displayName || session.username).charAt(0).toUpperCase();
-            document.getElementById('welcomeName').textContent = session.displayName || session.username;
-
-            // ซ่อน loading, แสดง content
-            const loading = document.getElementById('authLoading');
-            loading.style.opacity = '0';
-            setTimeout(() => {
-                loading.style.display = 'none';
-                document.getElementById('mainContent').classList.add('loaded');
-            }, 500);
-
-            // อัพเดท session timer
-            setInterval(() => {
-                const s = Auth.getSession();
-                if (s) {
-                    const idle = Math.floor((Date.now() - s.lastActivity) / 1000);
-                    const remaining = Math.max(0, (CONFIG.SESSION_TIMEOUT / 1000) - idle);
-                    const m = Math.floor(remaining / 60);
-                    const sec = remaining % 60;
-                    document.getElementById('sessionTimer').textContent = `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-                }
-            }, 1000);
-        })();
-
-        function navigateTo(page) {
-            window.location.href = page;
+            toast.className = `fade-in-up flex items-center p-4 mb-4 rounded-2xl bg-white border ${borderColor} shadow-xl min-w-[280px]`;
+            toast.innerHTML = `
+                <div class="${iconColor} mr-3 flex-shrink-0 bg-slate-50 p-1.5 rounded-full">
+                    ${type === 'success' ? `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>` : `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`}
+                </div>
+                <div class="text-sm font-semibold text-slate-700">${message}</div>
+            `;
+            toastContainer.appendChild(toast);
+            setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateY(-20px)'; setTimeout(()=>toast.remove(),300) }, 3000);
         }
 
-        async function handleLogout() {
-            if (confirm('ต้องการออกจากระบบ?')) {
-                await Auth.logout('manual');
+        // ระบบควบคุม Modal เปิด-ปิด สมูทๆ
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const content = modal.querySelector('div');
+            
+            if (modal.classList.contains('modal-inactive')) {
+                modal.classList.remove('modal-inactive', 'hidden');
+                modal.classList.add('modal-active');
+                content.classList.remove('modal-content-inactive');
+                content.classList.add('modal-content-active');
+            } else {
+                modal.classList.remove('modal-active');
+                modal.classList.add('modal-inactive');
+                content.classList.remove('modal-content-active');
+                content.classList.add('modal-content-inactive');
+            }
+        }
+
+        // ฟังก์ชันอนุมัติ / ปฏิเสธ (ลบการ์ดออกจากหน้า UI)
+        function approveRequest(id) {
+            showToast('อนุมัติสิทธิ์สำเร็จ! ระบบกำลังส่งอีเมลแจ้งผู้ใช้งาน', 'success');
+            removeRequestCard(id);
+        }
+        function rejectRequest(id) {
+            showToast('ปฏิเสธคำขอเรียบร้อยแล้ว', 'error');
+            removeRequestCard(id);
+        }
+        function removeRequestCard(id) {
+            // ลบจากการ์ดพรีวิวหน้าหลัก
+            const card = document.getElementById('reqCard-' + id);
+            if(card) { card.style.opacity = '0'; setTimeout(()=>card.remove(), 300); }
+            // ลบจากตารางใน Modal
+            const tableRow = document.getElementById('tableReq-' + id);
+            if(tableRow) { tableRow.style.opacity = '0'; setTimeout(()=>tableRow.remove(), 300); }
+
+            // ซ่อนหัวข้อถ้าลบหมดแล้ว (จำลองการลบ 2 อัน)
+            setTimeout(() => {
+                if(!document.getElementById('reqCard-1') && !document.getElementById('reqCard-2')) {
+                    document.getElementById('emptyReq').classList.remove('hidden');
+                }
+            }, 350);
+        }
+
+        // ฟังก์ชันสร้างเมนูใหม่
+        document.getElementById('addMenuForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('newMenuName').value;
+            const desc = document.getElementById('newMenuDesc').value || 'ทางลัดบริการด่วนบนแดชบอร์ด';
+            const url = document.getElementById('newMenuUrl').value;
+
+            // สร้าง HTML สำหรับการ์ดใหม่
+            const newCard = document.createElement('div');
+            newCard.className = 'glass-card rounded-3xl p-6 fade-in-up flex flex-col cursor-pointer';
+            newCard.onclick = () => window.location.href = url;
+            newCard.innerHTML = `
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-1">${title}</h3>
+                <p class="text-[10px] text-emerald-500 uppercase tracking-[0.1em] mb-3">Custom Service</p>
+                <p class="text-xs text-slate-500 font-light leading-relaxed flex-1">${desc}</p>
+                <div class="mt-4 flex items-center text-indigo-600 text-xs font-semibold">
+                    เข้าใช้งาน <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                </div>
+            `;
+
+            // นำการ์ดไปแปะก่อนกล่อง "+ เพิ่มบริการ"
+            const grid = document.getElementById('serviceGrid');
+            grid.insertBefore(newCard, grid.lastElementChild);
+
+            showToast(`เพิ่มเมนู "${title}" เรียบร้อยแล้ว!`, 'success');
+            toggleModal('addMenuModal');
+            this.reset();
+        });
+
+        // จำลองปุ่ม Logout
+        function handleLogout() {
+            if (confirm('ยืนยันการออกจากระบบ?')) {
+                window.location.href = 'login.html';
             }
         }
     </script>
