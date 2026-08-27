@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — ระบบงานประชาสัมพันธ์</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #07090f; margin: 0; min-height: 100vh; }
+        
+        .liquid-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -1; overflow: hidden; background: #07090f; }
+        .blob { position: absolute; filter: blur(80px); opacity: 0.6; animation: move-liquid 25s infinite alternate ease-in-out; }
+        .blob-1 { width: 40vw; height: 40vw; background: linear-gradient(135deg, #a855f7, #6366f1); top: -15%; left: -5%; border-radius: 43% 57% 70% 30% / 44% 45% 55% 56%; animation-duration: 30s; }
+        .blob-2 { width: 35vw; height: 35vw; background: linear-gradient(135deg, #0ea5e9, #3b82f6); bottom: -15%; right: -5%; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation-duration: 28s; animation-delay: -5s; }
+        .blob-3 { width: 25vw; height: 25vw; background: linear-gradient(135deg, #d946ef, #8b5cf6); top: 50%; left: 50%; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation-duration: 22s; animation-delay: -10s; }
+        @keyframes move-liquid { 0% { transform: translate(0, 0) rotate(0deg) scale(1); } 33% { transform: translate(8vw, -10vh) rotate(90deg) scale(1.1); } 66% { transform: translate(-8vw, 10vh) rotate(180deg) scale(0.9); } 100% { transform: translate(4vw, 4vh) rotate(360deg) scale(1); } }
+
+        .glass { background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-top: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .glass-card:hover { background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%); border-color: rgba(255, 255, 255, 0.25); transform: translateY(-8px) scale(1.02); box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(168, 85, 247, 0.15); }
+        .glass-card:active { transform: translateY(-2px) scale(0.98); }
+
+        /* Loading screen */
+        #authLoading { transition: opacity 0.5s ease; }
+        #mainContent { opacity: 0; transition: opacity 0.6s ease; }
+        #mainContent.loaded { opacity: 1; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
+        .liquid-btn-danger { background: linear-gradient(135deg, rgba(239,68,68,0.9), rgba(220,38,38,0.8)); color: white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px -5px rgba(239,68,68,0.4); transition: all 0.3s ease; }
+        .liquid-btn-danger:hover { transform: translateY(-2px); box-shadow: 0 12px 25px -5px rgba(239,68,68,0.5); }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+
+    <div class="liquid-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Auth Loading Screen -->
+    <div id="authLoading" class="fixed inset-0 z-[100] bg-[#07090f] flex items-center justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-16 h-16 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-xl mb-6 animate-pulse">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            </div>
+            <p class="text-lg font-medium text-white mb-2">กำลังตรวจสอบสิทธิ์การเข้าถึง</p>
+            <p class="text-xs text-gray-400 uppercase tracking-widest">Verifying Authorization</p>
+            <svg class="w-6 h-6 animate-spin text-indigo-400 mt-6" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="relative z-10">
+        <!-- Header -->
+        <header class="glass border-b border-white/5 sticky top-0 z-50">
+            <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold leading-tight">ระบบงานประชาสัมพันธ์</h1>
+                        <p class="text-[10px] text-indigo-300 uppercase tracking-[0.2em] opacity-80">CMU Library PR Portal</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-medium text-white" id="headerDisplayName">—</p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider" id="headerRole">—</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-500/30 to-indigo-500/30 border border-white/15 flex items-center justify-center text-sm font-semibold" id="headerAvatar">?</div>
+                    <button onclick="handleLogout()" class="liquid-btn-danger px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2" title="ออกจากระบบ">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <span class="hidden sm:inline">ออกจากระบบ</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="max-w-6xl mx-auto px-6 py-10">
+            <!-- Welcome Section -->
+            <div class="mb-12 fade-in-up" style="animation-delay: 0.1s">
+                <h2 class="text-3xl font-semibold mb-2">สวัสดี, <span id="welcomeName" class="text-fuchsia-400">—</span></h2>
+                <p class="text-gray-400 font-light">เลือกบริการที่ต้องการใช้งาน</p>
+            </div>
+
+            <!-- Session Status -->
+            <div class="glass rounded-2xl p-4 mb-10 flex items-center gap-4 fade-in-up" style="animation-delay: 0.2s">
+                <div class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)] animate-pulse flex-shrink-0"></div>
+                <div class="flex-1">
+                    <p class="text-sm text-gray-300 font-light">เซสชันปลอดภัย — Single Session Enforcement เปิดอยู่ | Timeout: 15 นาที</p>
+                </div>
+                <div class="text-xs text-gray-500 font-mono" id="sessionTimer">—</div>
+            </div>
+
+            <!-- Service Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Card 1: วิเคราะห์สื่อออนไลน์ -->
+                <div class="glass-card rounded-3xl p-8 fade-in-up" style="animation-delay: 0.3s" onclick="navigateTo('service-media.html')">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">วิเคราะห์ข้อมูลสื่อออนไลน์</h3>
+                    <p class="text-[10px] text-cyan-300/70 uppercase tracking-[0.2em] mb-4">Online Media Analytics</p>
+                    <p class="text-sm text-gray-400 font-light leading-relaxed">วิเคราะห์และรายงานผลข้อมูลสื่อออนไลน์ทุกช่องทาง ทั้ง Facebook, Instagram, Website และอื่นๆ ที่เกี่ยวข้อง</p>
+                    <div class="mt-6 flex items-center text-cyan-400 text-sm font-medium">
+                        เข้าใช้งาน
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Card 2: วิเคราะห์แบบสอบถาม -->
+                <div class="glass-card rounded-3xl p-8 fade-in-up" style="animation-delay: 0.4s" onclick="navigateTo('service-survey.html')">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">วิเคราะห์ข้อมูลแบบสอบถาม</h3>
+                    <p class="text-[10px] text-fuchsia-300/70 uppercase tracking-[0.2em] mb-4">Survey Data Analytics</p>
+                    <p class="text-sm text-gray-400 font-light leading-relaxed">นำเข้าข้อมูลจากแบบสอบถาม วิเคราะห์ผล สร้างกราฟ แปลผล และสรุปรายงานอัตโนมัติ</p>
+                    <div class="mt-6 flex items-center text-fuchsia-400 text-sm font-medium">
+                        เข้าใช้งาน
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Info -->
+            <div class="mt-16 text-center fade-in-up" style="animation-delay: 0.6s">
+                <p class="text-xs text-gray-600 font-light">ระบบงานประชาสัมพันธ์ สำนักหอสมุด มหาวิทยาลัยเชียงใหม่</p>
+                <p class="text-[10px] text-gray-700 mt-1 uppercase tracking-widest">CMU Library PR Portal — Secured System</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // ===== Auth Guard =====
+        (async function() {
+            const authOk = await Auth.requireAuth();
+            if (!authOk) return; // จะ redirect ไปหน้า login แล้ว
+
+            // Auth ผ่าน — แสดง dashboard
+            const session = Auth.getSession();
+            document.getElementById('headerDisplayName').textContent = session.displayName || session.username;
+            document.getElementById('headerRole').textContent = session.role === 'admin' ? 'ผู้ดูแลระบบ' : 'ผู้ใช้งาน';
+            document.getElementById('headerAvatar').textContent = (session.displayName || session.username).charAt(0).toUpperCase();
+            document.getElementById('welcomeName').textContent = session.displayName || session.username;
+
+            // ซ่อน loading, แสดง content
+            const loading = document.getElementById('authLoading');
+            loading.style.opacity = '0';
+            setTimeout(() => {
+                loading.style.display = 'none';
+                document.getElementById('mainContent').classList.add('loaded');
+            }, 500);
+
+            // อัพเดท session timer
+            setInterval(() => {
+                const s = Auth.getSession();
+                if (s) {
+                    const idle = Math.floor((Date.now() - s.lastActivity) / 1000);
+                    const remaining = Math.max(0, (CONFIG.SESSION_TIMEOUT / 1000) - idle);
+                    const m = Math.floor(remaining / 60);
+                    const sec = remaining % 60;
+                    document.getElementById('sessionTimer').textContent = `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        })();
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        async function handleLogout() {
+            if (confirm('ต้องการออกจากระบบ?')) {
+                await Auth.logout('manual');
+            }
+        }
+    </script>
+</body>
+</html>

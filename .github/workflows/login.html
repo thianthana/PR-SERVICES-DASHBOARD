@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบงานประชาสัมพันธ์ (PR Portal) — เข้าสู่ระบบ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #07090f; margin: 0; overflow-x: hidden; min-height: 100vh; }
+        
+        .liquid-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -1; overflow: hidden; background: #07090f; }
+        .blob { position: absolute; filter: blur(60px); opacity: 0.8; animation: move-liquid 20s infinite alternate ease-in-out; }
+        .blob-1 { width: 50vw; height: 50vw; background: linear-gradient(135deg, #a855f7, #6366f1); top: -10%; left: -10%; border-radius: 43% 57% 70% 30% / 44% 45% 55% 56%; animation-duration: 25s; }
+        .blob-2 { width: 45vw; height: 45vw; background: linear-gradient(135deg, #0ea5e9, #3b82f6); bottom: -20%; right: -10%; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation-duration: 22s; animation-delay: -5s; }
+        .blob-3 { width: 35vw; height: 35vw; background: linear-gradient(135deg, #d946ef, #8b5cf6); top: 40%; left: 40%; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation-duration: 18s; animation-delay: -10s; }
+        @keyframes move-liquid { 0% { transform: translate(0, 0) rotate(0deg) scale(1); } 33% { transform: translate(10vw, -15vh) rotate(90deg) scale(1.1); } 66% { transform: translate(-10vw, 15vh) rotate(180deg) scale(0.9); } 100% { transform: translate(5vw, 5vh) rotate(360deg) scale(1); } }
+
+        .liquid-glass { background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); border-top: 1px solid rgba(255, 255, 255, 0.3); border-left: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.05); }
+        
+        .liquid-input { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.08); border-top: 1px solid rgba(255, 255, 255, 0.15); color: white; box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .liquid-input:focus { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.4); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 25px rgba(168, 85, 247, 0.4); transform: scale(1.02); }
+        
+        .otp-input { background: rgba(0, 0, 0, 0.4); border: 2px solid rgba(255, 255, 255, 0.05); color: white; box-shadow: inset 0 2px 5px rgba(0,0,0,0.4); transition: all 0.2s ease-in-out; }
+        @keyframes waitingPulse { 0% { border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); } 50% { border-color: rgba(255, 255, 255, 1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); } 100% { border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); } }
+        .otp-input:focus { background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 255, 255, 1); transform: scale(1.08); animation: waitingPulse 1.2s infinite ease-in-out; }
+
+        .liquid-btn { background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.8)); box-shadow: 0 10px 20px -5px rgba(255,255,255,0.3), inset 0 -3px 5px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .liquid-btn:hover:not(:disabled) { box-shadow: 0 15px 25px -5px rgba(255,255,255,0.4), inset 0 -3px 5px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .liquid-btn:active:not(:disabled) { transform: translateY(2px) scale(0.98); }
+        .liquid-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .secure-box-wrapper { position: relative; background: rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; padding: 2px; z-index: 1; transition: all 0.4s ease; }
+        .secure-box-border { position: absolute; top: 50%; left: 50%; width: 800px; height: 800px; background: conic-gradient(from 0deg, transparent 70%, rgba(255,255,255,0.9) 100%); transform-origin: center; animation: spinBorder 1.5s linear infinite; z-index: -1; transition: opacity 0.4s ease; }
+        @keyframes spinBorder { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        .secure-box-inner { background: #10131e; border-radius: calc(1rem - 2px); position: relative; z-index: 2; transition: all 0.4s ease; }
+
+        .penguin-wrapper { position: fixed; bottom: 15px; z-index: 130; pointer-events: none; }
+        .penguin-inner { filter: drop-shadow(0 10px 8px rgba(0,0,0,0.6)); transform: scaleX(var(--facing, 1)); }
+        @keyframes waddleBounce { 0%, 100% { transform: translateY(0) scaleX(var(--facing, 1)) rotate(0deg); } 25% { transform: translateY(-15px) scaleX(var(--facing, 1)) rotate(-8deg); } 75% { transform: translateY(-15px) scaleX(var(--facing, 1)) rotate(8deg); } }
+        .walking .penguin-inner { animation: waddleBounce var(--waddle-speed, 0.4s) infinite; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+        .toast-enter { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast-leave { animation: fadeOut 0.3s ease-in forwards; }
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        @keyframes vaultUpload { 0% { transform: scale(0.8) translateY(20px); opacity: 0; } 50% { transform: scale(1.1) translateY(-10px); opacity: 1; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .vault-animate { animation: vaultUpload 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+        /* Logout reason banner */
+        .reason-banner { animation: slideDown 0.5s ease forwards; }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 text-white relative">
+
+    <div class="liquid-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Logout Reason Banner -->
+    <div id="reasonBanner" class="hidden fixed top-0 left-0 right-0 z-[200] text-center py-3 px-4 text-sm font-medium reason-banner"></div>
+
+    <div id="toastContainer" class="fixed top-5 right-5 z-[150] flex flex-col gap-3"></div>
+
+    <!-- Login หลัก -->
+    <div class="liquid-glass rounded-[2.5rem] w-full max-w-md p-10 relative overflow-hidden z-10 transition-opacity duration-500" id="loginBox">
+        <div class="flex justify-center mb-8 relative">
+            <div class="absolute inset-0 bg-white/20 blur-2xl rounded-full"></div>
+            <div class="w-16 h-16 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-xl relative z-10 hover:rotate-12 hover:scale-110 cursor-pointer transition-transform duration-300">
+                <svg class="w-8 h-8 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+            </div>
+        </div>
+        <div class="text-center mb-8 flex flex-col items-center">
+            <h1 class="text-3xl font-semibold tracking-wide drop-shadow-sm">ระบบงานประชาสัมพันธ์</h1>
+            <h2 class="text-[10px] uppercase text-indigo-300 font-medium tracking-[0.3em] mt-1.5 opacity-80">CMU Library Portal</h2>
+            <div class="mt-4 flex flex-col items-center">
+                <p class="text-sm text-gray-200 font-light">เข้าสู่ระบบยืนยันตัวตน</p>
+                <p class="text-[11px] text-gray-400 mt-0.5 tracking-wide">Secure Gateway</p>
+            </div>
+        </div>
+        <form id="loginForm" class="space-y-5" novalidate>
+            <div>
+                <input type="text" id="username" placeholder="ชื่อผู้ใช้งาน / Username" autocomplete="off" class="liquid-input w-full px-5 py-4 rounded-2xl outline-none placeholder-gray-400/70 text-sm font-medium tracking-wide">
+            </div>
+            <div>
+                <input type="password" id="password" placeholder="รหัสผ่าน / Password" class="liquid-input w-full px-5 py-4 rounded-2xl outline-none placeholder-gray-400/70 text-sm font-medium tracking-wide">
+            </div>
+            <button type="submit" id="submitBtn" class="liquid-btn w-full mt-8 text-gray-900 py-3.5 rounded-2xl flex flex-col items-center justify-center">
+                <span class="font-semibold text-lg leading-tight">เข้าสู่ระบบ</span>
+                <span class="text-xs text-gray-600 font-medium opacity-70 mt-0.5 tracking-wide">Continue</span>
+            </button>
+        </form>
+
+        <div class="mt-6 text-center border-t border-white/10 pt-5 space-y-2">
+            <p class="text-sm text-gray-400 font-light flex items-center justify-center">
+                ยังไม่มีรหัสผู้ใช้งาน? 
+                <button type="button" onclick="openRequestModal()" class="text-fuchsia-400 font-medium underline underline-offset-4 hover:text-fuchsia-300 transition-colors ml-2 focus:outline-none flex items-center">
+                    ขอสิทธิ์เข้าระบบ
+                </button>
+            </p>
+            <p class="text-[13px] text-gray-400 font-light flex items-center justify-center">
+                ส่งคำขอไปแล้ว? 
+                <button type="button" onclick="openStatusModal()" class="text-indigo-400 font-medium underline underline-offset-4 hover:text-indigo-300 transition-colors ml-2 focus:outline-none flex items-center">
+                    ติดตามสถานะการสมัคร
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                </button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Popup ติดตามสถานะ -->
+    <div id="statusModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[120] backdrop-blur-md transition-all duration-300 opacity-0">
+        <div class="liquid-glass rounded-[2.5rem] w-full max-w-md p-8 text-center relative z-20 scale-95 transition-transform duration-300" id="statusBox">
+            <button onclick="closeStatusModal()" id="closeStatusBtn" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors hover:rotate-90 duration-300 bg-white/10 p-1.5 rounded-full backdrop-blur-sm z-30">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div id="statusFormSection">
+                <div class="w-14 h-14 bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-4 relative shadow-[0_0_20px_rgba(99,102,241,0.2)]">
+                    <svg class="w-7 h-7 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white drop-shadow-sm mb-1">ติดตามสถานะ</h3>
+                <p class="text-[10px] text-gray-400 font-light tracking-[0.2em] uppercase mb-6">Track Application Status</p>
+                <form id="statusCheckForm" class="space-y-5 text-left">
+                    <div>
+                        <label class="text-[12px] text-gray-300 ml-2 mb-1 block font-light">กรอกอีเมลที่ใช้สมัคร <span class="opacity-50">/ Registered Email</span></label>
+                        <input type="email" id="statusEmail" required placeholder="example@domain.com" class="liquid-input w-full px-5 py-4 rounded-2xl outline-none text-sm font-medium tracking-wide">
+                    </div>
+                    <button type="submit" class="liquid-btn w-full text-gray-900 py-3.5 rounded-2xl flex flex-col items-center justify-center mt-2">
+                        <span class="font-semibold text-lg leading-tight">ตรวจสอบสถานะ</span>
+                        <span class="text-[11px] text-gray-600 font-medium opacity-70 mt-0.5 tracking-wide">Check Status</span>
+                    </button>
+                </form>
+            </div>
+            <div id="statusLoadingSection" class="hidden flex-col items-center justify-center py-10">
+                <svg class="w-12 h-12 animate-spin text-indigo-400 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <p class="text-lg font-medium text-white">กำลังค้นหาข้อมูลในระบบ...</p>
+                <p class="text-[11px] text-gray-400 mt-1 uppercase tracking-widest">Searching Database</p>
+            </div>
+            <div id="statusResultSection" class="hidden flex-col items-center text-center py-6"></div>
+        </div>
+    </div>
+
+    <!-- Popup ขอสิทธิ์ -->
+    <div id="requestModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[120] backdrop-blur-md transition-all duration-300 opacity-0">
+        <div class="liquid-glass rounded-[2.5rem] w-full max-w-md p-8 text-center relative z-20 scale-95 transition-transform duration-300" id="requestBox">
+            <button onclick="closeRequestModal()" id="closeRequestBtn" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors hover:rotate-90 duration-300 bg-white/10 p-1.5 rounded-full backdrop-blur-sm z-30">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div id="requestFormSection">
+                <h3 class="text-2xl font-semibold text-white drop-shadow-sm mb-1">ขอรหัสผู้ใช้งาน</h3>
+                <p class="text-[10px] text-gray-400 font-light tracking-[0.2em] uppercase mb-6">Request System Access</p>
+                <form id="requestAccessForm" class="space-y-3 text-left">
+                    <div>
+                        <label class="text-[12px] text-gray-300 ml-2 mb-1 block font-light">ชื่อ-นามสกุล <span class="opacity-50">/ Full Name</span></label>
+                        <input type="text" id="reqFullName" required class="liquid-input w-full px-5 py-3 rounded-2xl outline-none text-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="text-[12px] text-gray-300 ml-2 mb-1 block font-light">อีเมล <span class="opacity-50">/ Email</span></label>
+                        <input type="email" id="reqEmail" required placeholder="example@domain.com" class="liquid-input w-full px-5 py-3 rounded-2xl outline-none text-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="text-[12px] text-gray-300 ml-2 mb-1 block font-light">ตำแหน่ง <span class="opacity-50">/ Position</span></label>
+                        <input type="text" id="reqPosition" required class="liquid-input w-full px-5 py-3 rounded-2xl outline-none text-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="text-[12px] text-gray-300 ml-2 mb-1 block font-light">วัตถุประสงค์ <span class="opacity-50">/ Purpose</span></label>
+                        <textarea id="reqPurpose" required rows="2" class="liquid-input w-full px-5 py-3 rounded-2xl outline-none text-sm font-medium resize-none"></textarea>
+                    </div>
+                    <button type="submit" id="requestSubmitBtn" class="liquid-btn w-full mt-6 text-gray-900 py-3.5 rounded-2xl flex flex-col items-center justify-center">
+                        <span class="font-semibold text-lg leading-tight">ส่งคำขอ</span>
+                        <span class="text-[11px] text-gray-600 font-medium opacity-70 mt-0.5 tracking-wide">Submit Request</span>
+                    </button>
+                </form>
+            </div>
+            <div id="requestSuccessSection" class="hidden flex-col items-center justify-center py-6">
+                <div id="vaultAnimationContainer" class="w-full h-40 flex items-center justify-center"></div>
+                <div id="vaultTextContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup OTP -->
+    <div id="otpModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-md transition-all duration-300 opacity-0">
+        <div class="liquid-glass rounded-[2.5rem] w-full max-w-sm p-8 text-center relative z-20 scale-95 transition-transform duration-300" id="otpBox">
+            <button onclick="closeOtpModal()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors hover:rotate-90 duration-300 bg-white/10 p-1.5 rounded-full backdrop-blur-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="mb-6 flex flex-col items-center">
+                <div class="w-14 h-14 bg-white/10 border border-white/20 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 relative shadow-lg">
+                    <div class="absolute inset-0 rounded-2xl bg-white/20 animate-ping opacity-50"></div>
+                    <svg class="w-7 h-7 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-medium text-white drop-shadow-sm leading-tight">ตรวจสอบอีเมล</h3>
+                <span class="text-[11px] text-gray-400 font-light mt-1 tracking-wider uppercase">Check your email</span>
+                <p class="text-sm text-gray-300 leading-relaxed font-light mt-4">
+                    ระบบได้ส่งรหัสความปลอดภัย 6 หลัก ไปยัง<br>
+                    <span id="maskedEmailDisplay" class="font-medium text-white mt-1 inline-block text-base tracking-wider bg-white/10 px-3 py-1 rounded-lg border border-white/10"></span>
+                </p>
+            </div>
+            <form id="otpForm" class="space-y-5">
+                <div class="flex justify-between gap-2" id="otpContainer">
+                    <input type="number" class="otp-input outline-none w-12 h-14 text-center text-2xl font-semibold rounded-xl" maxlength="1">
+                    <input type="number" class="otp-input outline-none w-12 h-14 text-center text-2xl font-semibold rounded-xl" maxlength="1">
+                    <input type="number" class="otp-input outline-none w-12 h-14 text-center text-2xl font-semibold rounded-xl" maxlength="1">
+                    <input type="number" class="otp-input outline-none w-12 h-14 text-center text-2xl font-semibold rounded-xl" maxlength="1">
+                    <input type="number" class="otp-input outline-none w-12 h-14 text-center text-2xl font-semibold rounded-xl" maxlength="1">
+                    <input type="number" class="otp-input outline-none w-12 h-14 text-center text-2xl font-semibold rounded-xl" maxlength="1">
+                </div>
+                <button type="submit" class="liquid-btn w-full text-gray-900 py-3 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden">
+                    <span class="font-semibold text-lg leading-tight">ยืนยันรหัส</span>
+                    <span class="text-[11px] text-gray-600 font-medium opacity-70 mt-0.5 tracking-wide">Verify Code</span>
+                </button>
+            </form>
+            <div class="mt-6 flex flex-col items-center">
+                <div class="text-[13px] text-gray-300 font-light flex items-center">
+                    รหัสหมดอายุใน <span id="timerDisplay" class="ml-2 font-mono text-base font-semibold text-fuchsia-400 drop-shadow-[0_0_8px_rgba(232,121,249,0.5)]">05:00</span>
+                </div>
+                <button type="button" id="resendBtn" disabled class="mt-3 flex flex-col items-center text-gray-500 cursor-not-allowed transition-all duration-300 hover:scale-105 active:scale-95">
+                    <span class="text-sm font-medium underline underline-offset-4 decoration-1">ขอรหัส OTP อีกครั้ง</span>
+                    <span class="text-[10px] uppercase tracking-wider mt-1 opacity-70">Resend OTP</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup ยินดีต้อนรับ -->
+    <div id="welcomeModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[120] backdrop-blur-lg transition-all duration-500 opacity-0">
+        <div class="liquid-glass rounded-[2.5rem] w-full max-w-md p-8 text-center relative z-20 scale-95 transition-transform duration-500" id="welcomeBox">
+            <div class="w-20 h-20 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6 relative shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                <svg class="w-10 h-10 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-2xl font-semibold text-white drop-shadow-sm mb-2">ยินดีต้อนรับคุณ <span id="welcomeUsername" class="text-fuchsia-400 font-medium">...</span></h3>
+            <p class="text-gray-200 font-light mb-6 tracking-wide">เข้าสู่ระบบงานประชาสัมพันธ์ <span class="font-medium text-white">สำนักหอสมุด</span></p>
+            <div class="flex flex-col items-center justify-center mb-6 bg-black/20 py-4 rounded-2xl border border-white/5">
+                <svg class="w-6 h-6 animate-spin text-fuchsia-400 mb-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span class="text-sm text-gray-300 font-light">กำลังพาท่านไปยังหน้า Dashboard...</span>
+            </div>
+            <div class="secure-box-wrapper w-full mt-2" id="securityWrapper">
+                <div class="secure-box-border" id="securityBorder"></div>
+                <div class="secure-box-inner py-3.5 px-4 flex items-center justify-center" id="securityInner">
+                    <svg id="securityIcon" class="w-5 h-5 mr-2 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <span id="securityText" class="font-medium text-[14px] text-gray-200 tracking-wide">กำลังเข้ารหัสและเปิดระบบความปลอดภัย...</span>
+                </div>
+            </div>
+            <div class="mt-7 border-t border-white/10 pt-5">
+                <p class="text-[11px] text-gray-400 leading-relaxed font-light text-left flex items-start">
+                    <svg class="w-4 h-4 text-amber-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <span><strong class="text-gray-300 font-medium">Security Notice:</strong> หากท่านทำการ Login จากอุปกรณ์อื่น เครื่องนี้จะถูกบังคับออกจากระบบทันที (Strict Single Session) เพื่อความปลอดภัยสูงสุด</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // ตัวแปรระบบ
+        let timerInterval;
+        const COUNTDOWN_TIME = 300;
+        let penguinSpawnerInterval;
+        let isPenguinActive = false;
+        let currentUsername = '';
+        let currentDisplayName = '';
+
+        const loginForm = document.getElementById('loginForm');
+        const otpModal = document.getElementById('otpModal');
+        const otpBox = document.getElementById('otpBox');
+        const welcomeModal = document.getElementById('welcomeModal');
+        const welcomeBox = document.getElementById('welcomeBox');
+        const maskedEmailDisplay = document.getElementById('maskedEmailDisplay');
+        const otpForm = document.getElementById('otpForm');
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const toastContainer = document.getElementById('toastContainer');
+        const submitBtn = document.getElementById('submitBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const resendBtn = document.getElementById('resendBtn');
+
+        // ===== เมื่อโหลดหน้า — ตรวจสอบเหตุผล Logout =====
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const reason = params.get('reason');
+            const banner = document.getElementById('reasonBanner');
+
+            const messages = {
+                timeout: { text: 'เซสชันหมดอายุเนื่องจากไม่มีการใช้งานเกิน 15 นาที กรุณาเข้าสู่ระบบใหม่', color: 'bg-amber-500/90 text-white' },
+                replaced: { text: 'บัญชีของท่านถูกเข้าใช้งานจากอุปกรณ์อื่น เครื่องนี้จึงถูกบังคับออกจากระบบ', color: 'bg-rose-500/90 text-white' },
+                invalid: { text: 'เซสชันไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่', color: 'bg-orange-500/90 text-white' },
+                noauth: { text: 'กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน', color: 'bg-indigo-500/90 text-white' }
+            };
+
+            if (reason && messages[reason]) {
+                banner.className = `fixed top-0 left-0 right-0 z-[200] text-center py-3 px-4 text-sm font-medium reason-banner ${messages[reason].color}`;
+                banner.textContent = messages[reason].text;
+                banner.classList.remove('hidden');
+                setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 0.5s'; setTimeout(() => banner.classList.add('hidden'), 500); }, 6000);
+            }
+
+            // ถ้ามี session อยู่แล้ว ให้ไปหน้า dashboard เลย
+            const session = Auth.getSession();
+            if (session) {
+                window.location.href = CONFIG.PAGES.DASHBOARD;
+            }
+        });
+
+        // ===== Toast =====
+        function showToast(message, type = 'warning') {
+            const toast = document.createElement('div');
+            let iconColor, borderColor;
+            if (type === 'warning') { iconColor = 'text-amber-400'; borderColor = 'border-amber-400/30'; }
+            else if (type === 'error') { iconColor = 'text-rose-400'; borderColor = 'border-rose-400/30'; }
+            else { iconColor = 'text-emerald-400'; borderColor = 'border-emerald-400/30'; }
+            toast.className = `toast-enter flex items-center p-4 mb-4 rounded-2xl liquid-glass border ${borderColor} shadow-2xl min-w-[280px]`;
+            toast.innerHTML = `<div class="${iconColor} mr-3 flex-shrink-0">${type === 'success' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>'}</div><div class="text-sm font-medium text-white">${message}</div>`;
+            toastContainer.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('toast-enter'); toast.classList.add('toast-leave'); setTimeout(() => toast.remove(), 300); }, 3500);
+        }
+
+        // ===== Loading Button =====
+        function setButtonLoading(btn, text, subtext) {
+            btn.disabled = true;
+            btn.innerHTML = `<div class="flex items-center justify-center text-gray-900"><svg class="w-5 h-5 mr-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><div class="flex flex-col items-start"><span class="font-medium text-[15px] leading-tight">${text}</span><span class="text-[10px] mt-0.5 opacity-70 tracking-wide">${subtext}</span></div></div>`;
+        }
+        function resetButton(btn, text, subtext) {
+            btn.disabled = false;
+            btn.innerHTML = `<span class="font-semibold text-lg leading-tight">${text}</span><span class="text-xs text-gray-600 font-medium opacity-70 mt-0.5 tracking-wide">${subtext}</span>`;
+        }
+
+        // ===== LOGIN =====
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const uv = document.getElementById('username').value.trim();
+            const pv = document.getElementById('password').value;
+
+            if (!uv) { showToast('กรุณากรอก Username', 'warning'); document.getElementById('username').focus(); return; }
+            if (!pv) { showToast('กรุณากรอก Password', 'warning'); document.getElementById('password').focus(); return; }
+
+            setButtonLoading(submitBtn, 'กำลังตรวจสอบข้อมูล', 'Verifying Credentials...');
+
+            setTimeout(() => setButtonLoading(submitBtn, 'สร้างการเชื่อมต่อที่ปลอดภัย', 'Securing Connection...'), 800);
+
+            const result = await Auth.login(uv, pv);
+
+            if (!result.success) {
+                resetButton(submitBtn, 'เข้าสู่ระบบ', 'Continue');
+
+                if (result.error === 'ACCOUNT_LOCKED') {
+                    showToast(`บัญชีถูกระงับชั่วคราว กรุณารอ ${result.minutesLeft} นาที`, 'error');
+                } else if (result.error === 'INVALID_CREDENTIALS') {
+                    if (result.attemptsLeft !== undefined && result.attemptsLeft > 0) {
+                        showToast(`ข้อมูลไม่ถูกต้อง เหลือโอกาสอีก ${result.attemptsLeft} ครั้ง`, 'error');
+                    } else if (result.attemptsLeft === 0) {
+                        showToast('บัญชีถูกระงับชั่วคราว กรุณาติดต่อผู้ดูแลระบบ', 'error');
+                    } else {
+                        showToast('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', 'error');
+                    }
+                } else if (result.error === 'ACCOUNT_DISABLED') {
+                    showToast('บัญชีนี้ถูกปิดการใช้งาน กรุณาติดต่อผู้ดูแลระบบ', 'error');
+                } else if (result.error === 'NETWORK_ERROR') {
+                    showToast('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองใหม่', 'error');
+                } else {
+                    showToast('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', 'error');
+                }
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+                return;
+            }
+
+            // Login สำเร็จ — ไปหน้า OTP
+            currentUsername = uv;
+            currentDisplayName = result.displayName || uv;
+
+            setTimeout(() => {
+                setButtonLoading(submitBtn, 'กำลังขอรหัส OTP', 'Requesting OTP...');
+            }, 400);
+
+            setTimeout(() => {
+                resetButton(submitBtn, 'เข้าสู่ระบบ', 'Continue');
+                maskedEmailDisplay.innerText = result.maskedEmail;
+                document.getElementById('loginBox').classList.add('opacity-30');
+                otpModal.classList.remove('hidden');
+                void otpModal.offsetWidth;
+                otpModal.classList.remove('opacity-0');
+                otpBox.classList.remove('scale-95');
+                otpBox.classList.add('scale-100');
+                startTimer(COUNTDOWN_TIME);
+                startPenguinSystem();
+                setTimeout(() => otpInputs[0].focus(), 400);
+            }, 1500);
+        });
+
+        // ===== OTP =====
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => { if (e.target.value.length === 1) { if (index < otpInputs.length - 1) otpInputs[index + 1].focus(); else input.blur(); } });
+            input.addEventListener('keydown', (e) => { if (e.key === 'Backspace' && !e.target.value && index > 0) { otpInputs[index - 1].focus(); otpInputs[index - 1].value = ''; } });
+        });
+
+        otpForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            let otpCode = '';
+            otpInputs.forEach(input => otpCode += input.value);
+            if (otpCode.length < 6) { showToast('กรุณากรอกรหัส OTP ให้ครบ 6 หลัก', 'warning'); triggerShake(); return; }
+
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerHTML = '<svg class="w-5 h-5 animate-spin text-gray-900 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+            const result = await Auth.verifyOTP(currentUsername, otpCode);
+
+            if (!result.success) {
+                resetButton(btn, 'ยืนยันรหัส', 'Verify Code');
+                if (result.error === 'OTP_EXPIRED') {
+                    showToast('รหัส OTP หมดอายุ กรุณาขอรหัสใหม่', 'error');
+                } else if (result.error === 'INVALID_OTP') {
+                    showToast('รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่', 'error');
+                } else {
+                    showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+                }
+                triggerShake();
+                setTimeout(() => { otpInputs.forEach(i => i.value = ''); otpInputs[0].focus(); }, 500);
+                return;
+            }
+
+            // OTP ถูกต้อง — แสดงหน้ายินดีต้อนรับ
+            showToast('ยืนยันตัวตนสำเร็จ! กำลังเข้าสู่ระบบ...', 'success');
+            otpModal.classList.add('opacity-0');
+            otpBox.classList.add('scale-95');
+            otpBox.classList.remove('scale-100');
+
+            setTimeout(() => {
+                otpModal.classList.add('hidden');
+                clearInterval(timerInterval);
+                document.getElementById('welcomeUsername').innerText = result.displayName || currentUsername;
+                welcomeModal.classList.remove('hidden');
+                void welcomeModal.offsetWidth;
+                welcomeModal.classList.remove('opacity-0');
+                welcomeBox.classList.remove('scale-95');
+                welcomeBox.classList.add('scale-100');
+                triggerAutoSecurity();
+
+                // Redirect ไป Dashboard หลังจาก animation เสร็จ
+                setTimeout(() => {
+                    window.location.href = CONFIG.PAGES.DASHBOARD;
+                }, 4500);
+            }, 300);
+        });
+
+        // ===== Modals =====
+        function closeOtpModal() {
+            otpModal.classList.add('opacity-0'); otpBox.classList.add('scale-95'); otpBox.classList.remove('scale-100');
+            setTimeout(() => { otpModal.classList.add('hidden'); document.getElementById('loginBox').classList.remove('opacity-30'); }, 300);
+            otpInputs.forEach(i => i.value = ''); clearInterval(timerInterval); clearPenguins();
+        }
+
+        function openStatusModal() {
+            document.getElementById('loginBox').classList.add('opacity-30');
+            const m = document.getElementById('statusModal'); const b = document.getElementById('statusBox');
+            m.classList.remove('hidden'); void m.offsetWidth; m.classList.remove('opacity-0'); b.classList.remove('scale-95'); b.classList.add('scale-100');
+        }
+        function closeStatusModal() {
+            const m = document.getElementById('statusModal'); const b = document.getElementById('statusBox');
+            m.classList.add('opacity-0'); b.classList.add('scale-95'); b.classList.remove('scale-100');
+            setTimeout(() => { m.classList.add('hidden'); document.getElementById('loginBox').classList.remove('opacity-30');
+                document.getElementById('statusFormSection').classList.remove('hidden');
+                document.getElementById('statusLoadingSection').classList.add('hidden'); document.getElementById('statusLoadingSection').classList.remove('flex');
+                document.getElementById('statusResultSection').classList.add('hidden'); document.getElementById('statusResultSection').classList.remove('flex');
+                document.getElementById('statusCheckForm').reset();
+            }, 300);
+        }
+        function openRequestModal() {
+            document.getElementById('loginBox').classList.add('opacity-30');
+            const m = document.getElementById('requestModal'); const b = document.getElementById('requestBox');
+            m.classList.remove('hidden'); void m.offsetWidth; m.classList.remove('opacity-0'); b.classList.remove('scale-95'); b.classList.add('scale-100');
+        }
+        function closeRequestModal() {
+            const m = document.getElementById('requestModal'); const b = document.getElementById('requestBox');
+            m.classList.add('opacity-0'); b.classList.add('scale-95'); b.classList.remove('scale-100');
+            setTimeout(() => { m.classList.add('hidden'); document.getElementById('loginBox').classList.remove('opacity-30');
+                document.getElementById('requestFormSection').classList.remove('hidden');
+                document.getElementById('requestSuccessSection').classList.add('hidden'); document.getElementById('requestSuccessSection').classList.remove('flex');
+                document.getElementById('closeRequestBtn').classList.remove('hidden');
+                document.getElementById('requestAccessForm').reset();
+            }, 300);
+        }
+
+        // ===== Status Check (ส่งไป Google Sheets จริง) =====
+        document.getElementById('statusCheckForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('statusEmail').value.trim();
+            if (!email) return;
+
+            document.getElementById('statusFormSection').classList.add('hidden');
+            const loadingSec = document.getElementById('statusLoadingSection');
+            const resultSec = document.getElementById('statusResultSection');
+            loadingSec.classList.remove('hidden'); loadingSec.classList.add('flex');
+
+            const result = await Auth.checkStatus(email);
+
+            setTimeout(() => {
+                loadingSec.classList.add('hidden'); loadingSec.classList.remove('flex');
+                resultSec.classList.remove('hidden'); resultSec.classList.add('flex');
+
+                if (result.success && result.found) {
+                    const statusMap = {
+                        active: { label: 'บัญชีพร้อมใช้งาน', color: 'emerald', desc: 'ท่านสามารถเข้าสู่ระบบได้แล้ว' },
+                        pending: { label: 'รอการอนุมัติ', color: 'amber', desc: 'ผู้ดูแลระบบกำลังพิจารณาคำขอของท่าน' },
+                        disabled: { label: 'บัญชีถูกระงับ', color: 'rose', desc: 'กรุณาติดต่อผู้ดูแลระบบ' }
+                    };
+                    const s = statusMap[result.status] || statusMap.pending;
+                    resultSec.innerHTML = `
+                        <div class="w-16 h-16 bg-${s.color}-500/20 border border-${s.color}-500/40 text-${s.color}-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-semibold text-white mb-2">${s.label}</h4>
+                        <p class="text-sm text-gray-300 font-light mb-6">${s.desc}</p>
+                        <button onclick="closeStatusModal()" class="liquid-btn w-full py-3 rounded-2xl text-gray-900 font-medium">ปิดหน้าต่าง</button>
+                    `;
+                } else {
+                    resultSec.innerHTML = `
+                        <div class="w-16 h-16 bg-gray-500/20 border border-gray-500/40 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-semibold text-white mb-2">ไม่พบข้อมูล</h4>
+                        <p class="text-sm text-gray-300 font-light mb-6">ไม่พบคำขอที่ใช้อีเมลนี้ กรุณาตรวจสอบอีกครั้ง</p>
+                        <button onclick="closeStatusModal()" class="liquid-btn w-full py-3 rounded-2xl text-gray-900 font-medium">ปิดหน้าต่าง</button>
+                    `;
+                }
+                showToast(result.found ? 'พบข้อมูลในระบบ' : 'ไม่พบข้อมูลในระบบ', result.found ? 'success' : 'warning');
+            }, 2000);
+        });
+
+        // ===== Request Access (ส่งไป Google Sheets จริง) =====
+        document.getElementById('requestAccessForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const data = {
+                fullName: document.getElementById('reqFullName').value.trim(),
+                email: document.getElementById('reqEmail').value.trim(),
+                position: document.getElementById('reqPosition').value.trim(),
+                purpose: document.getElementById('reqPurpose').value.trim()
+            };
+
+            document.getElementById('requestFormSection').classList.add('hidden');
+            document.getElementById('closeRequestBtn').classList.add('hidden');
+            const successSec = document.getElementById('requestSuccessSection');
+            const vaultAnim = document.getElementById('vaultAnimationContainer');
+            const vaultText = document.getElementById('vaultTextContainer');
+            successSec.classList.remove('hidden'); successSec.classList.add('flex');
+
+            vaultAnim.innerHTML = '<svg class="w-12 h-12 animate-spin text-fuchsia-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+            vaultText.innerHTML = '<p class="text-lg font-medium text-white">กำลังแพ็กข้อมูลคำขอ...</p><p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Encrypting Data</p>';
+
+            const result = await Auth.requestAccess(data);
+
+            setTimeout(() => {
+                vaultAnim.innerHTML = '<svg class="w-12 h-12 animate-spin text-indigo-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                vaultText.innerHTML = '<p class="text-lg font-medium text-white">กำลังอัปโหลดเข้าคลังระบบ...</p><p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Connecting to Secure Vault</p>';
+            }, 1500);
+
+            setTimeout(() => {
+                if (result.success) {
+                    vaultAnim.innerHTML = '<div class="w-24 h-24 bg-fuchsia-500/20 border border-fuchsia-500/50 text-fuchsia-400 rounded-2xl flex items-center justify-center relative shadow-[0_0_40px_rgba(217,70,239,0.3)] vault-animate"><svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg><div class="absolute -bottom-2 -right-2 bg-emerald-500 rounded-full p-1 border-2 border-[#10131e]"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div></div>';
+                    vaultText.innerHTML = '<h3 class="text-2xl font-semibold text-white mb-3">ส่งคำขอสำเร็จ!</h3><p class="text-[13px] text-gray-300 font-light mb-6 tracking-wide leading-relaxed">หากผู้ดูแลระบบกำหนด Username, Password<br>และสิทธิ์การใช้งานเสร็จสิ้น<br>ท่านจะได้รับรายละเอียดผ่านทาง <strong class="text-fuchsia-400 font-medium">อีเมลที่ท่านระบุไว้</strong></p><button type="button" onclick="closeRequestModal()" class="liquid-btn w-full py-3.5 rounded-2xl text-gray-900 font-medium">กลับสู่หน้าหลัก</button>';
+                    showToast('อัปโหลดข้อมูลเข้าสู่คลังระบบเรียบร้อยแล้ว', 'success');
+                } else {
+                    vaultText.innerHTML = '<h3 class="text-xl font-semibold text-rose-400 mb-3">เกิดข้อผิดพลาด</h3><p class="text-sm text-gray-300 mb-6">ไม่สามารถส่งคำขอได้ กรุณาลองใหม่</p><button type="button" onclick="closeRequestModal()" class="liquid-btn w-full py-3 rounded-2xl text-gray-900 font-medium">ปิดหน้าต่าง</button>';
+                    showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+                }
+            }, 3500);
+        });
+
+        // ===== Timer =====
+        function startTimer(duration) {
+            clearInterval(timerInterval);
+            let time = duration;
+            resendBtn.disabled = true; resendBtn.classList.remove('text-fuchsia-400', 'cursor-pointer'); resendBtn.classList.add('text-gray-500', 'cursor-not-allowed');
+            timerInterval = setInterval(() => {
+                let m = Math.floor(time / 60); let s = time % 60;
+                m = m < 10 ? '0' + m : m; s = s < 10 ? '0' + s : s;
+                timerDisplay.textContent = `${m}:${s}`;
+                if (--time < 0) {
+                    clearInterval(timerInterval); timerDisplay.textContent = '00:00';
+                    resendBtn.disabled = false; resendBtn.classList.remove('text-gray-500', 'cursor-not-allowed'); resendBtn.classList.add('text-fuchsia-400', 'cursor-pointer');
+                    clearInterval(penguinSpawnerInterval);
+                }
+            }, 1000);
+        }
+
+        resendBtn.addEventListener('click', async function() {
+            if (!resendBtn.disabled) {
+                showToast('กำลังส่งรหัส OTP ใหม่...', 'warning');
+                otpInputs.forEach(i => i.value = ''); otpInputs[0].focus();
+                clearPenguins();
+                const result = await Auth.login(currentUsername, '___resend___');
+                // OTP จะถูกสร้างใหม่จากฝั่ง server ถ้ามี session pending
+                startTimer(COUNTDOWN_TIME); startPenguinSystem();
+                showToast('ส่งรหัส OTP ใหม่ไปยังอีเมลของคุณแล้ว', 'success');
+            }
+        });
+
+        // ===== Shake OTP =====
+        function triggerShake() {
+            const c = document.getElementById('otpContainer');
+            c.style.transition = 'transform 0.1s';
+            c.style.transform = 'translateX(-10px)';
+            setTimeout(() => c.style.transform = 'translateX(10px)', 50);
+            setTimeout(() => c.style.transform = 'translateX(-10px)', 100);
+            setTimeout(() => c.style.transform = 'translateX(0)', 150);
+        }
+
+        // ===== Security Animation =====
+        function triggerAutoSecurity() {
+            const w = document.getElementById('securityWrapper'); const b = document.getElementById('securityBorder'); const i = document.getElementById('securityInner'); const t = document.getElementById('securityText'); const ic = document.getElementById('securityIcon');
+            setTimeout(() => {
+                b.style.opacity = '0'; w.style.padding = '0'; w.style.background = 'linear-gradient(90deg, #10b981, #14b8a6)'; i.style.background = 'transparent';
+                w.classList.add('shadow-[0_0_20px_rgba(16,185,129,0.4)]'); w.style.transform = 'scale(1.02)'; setTimeout(() => w.style.transform = 'scale(1)', 200);
+                t.innerHTML = 'ระบบปลอดภัย 100% เปิดใช้งานแล้ว'; t.classList.remove('text-gray-200'); t.classList.add('text-white', 'font-semibold');
+                ic.classList.remove('animate-pulse'); ic.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>';
+                showToast('เปิดใช้งาน Strict Single Session และเข้ารหัสข้อมูลขั้นสูงสุดแล้ว', 'success');
+            }, 2800);
+        }
+
+        // ===== Penguin =====
+        function spawnPenguin() {
+            if (!isPenguinActive) return;
+            const w = document.createElement('div'); w.className = 'penguin-wrapper';
+            const i = document.createElement('div'); i.className = 'penguin-inner'; i.innerHTML = '🐧';
+            i.style.fontSize = (2 + Math.random() * 4) + 'rem';
+            i.style.setProperty('--waddle-speed', (0.25 + Math.random() * 0.3) + 's');
+            const tx = Math.random() * 90 + 5;
+            const side = Math.floor(Math.random() * 4);
+            let sl, st;
+            if (side === 0) { sl = tx + 'vw'; st = 'translateY(-110vh)'; i.style.setProperty('--facing', Math.random() > 0.5 ? 1 : -1); }
+            else if (side === 1) { sl = tx + 'vw'; st = 'translateY(30vh)'; i.style.setProperty('--facing', Math.random() > 0.5 ? 1 : -1); }
+            else if (side === 2) { sl = '-20vw'; st = 'translateY(0)'; i.style.setProperty('--facing', 1); w.classList.add('walking'); }
+            else { sl = '120vw'; st = 'translateY(0)'; i.style.setProperty('--facing', -1); w.classList.add('walking'); }
+            w.style.left = sl; w.style.transform = st; w.style.transition = 'transform 1.2s ease-out, left 1.5s ease-out';
+            w.appendChild(i); document.body.appendChild(w);
+            setTimeout(() => { if (!document.body.contains(w)) return; w.style.left = tx + 'vw'; w.style.transform = 'translateY(0)'; }, 50);
+            setTimeout(() => { if (!document.body.contains(w) || !isPenguinActive) return; w.classList.remove('walking'); roamPenguin(w, i, tx); }, 1600);
+        }
+        function roamPenguin(w, i, cx) {
+            if (!document.body.contains(w) || !isPenguinActive) return;
+            const tx = Math.random() * 90 + 5; const dist = Math.abs(tx - cx); const dur = dist * (0.05 + Math.random() * 0.15);
+            i.style.setProperty('--facing', tx > cx ? 1 : -1);
+            w.style.transition = `left ${dur}s ease-in-out`; w.style.left = tx + 'vw';
+            setTimeout(() => { if (!document.body.contains(w) || !isPenguinActive) return; w.classList.remove('walking');
+                setTimeout(() => { if (!document.body.contains(w) || !isPenguinActive) return; w.classList.add('walking'); roamPenguin(w, i, tx); }, 800 + Math.random() * 2000);
+            }, dur * 1000);
+        }
+        function startPenguinSystem() { isPenguinActive = true; spawnPenguin(); penguinSpawnerInterval = setInterval(spawnPenguin, 3500); }
+        function clearPenguins() { isPenguinActive = false; clearInterval(penguinSpawnerInterval); document.querySelectorAll('.penguin-wrapper').forEach(p => p.remove()); }
+    </script>
+</body>
+</html>
