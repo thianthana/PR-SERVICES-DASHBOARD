@@ -4,7 +4,7 @@
 
 const CONFIG = {
   // URL ของ Google Apps Script Web App (ได้จากการ Deploy)
-  API_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
+  API_URL: 'https://script.google.com/macros/s/AKfycbzdObNiqN6K0tL9uw5eaeDi4S_XFw3OHv5H4PXTr8_r-2Ax5lAztp2mJ9fQLT-eMKFZ/exec',
 
   // Session timeout (มิลลิวินาที) — 15 นาที
   SESSION_TIMEOUT: 15 * 60 * 1000,
