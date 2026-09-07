@@ -1,0 +1,8 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><title>บริการใหม่ · PR Portal</title>
+<!-- Place in web/service-example.html. For nested folders adjust ALL relative paths. -->
+<link rel="stylesheet" href="portal.css">
+<script defer src="js/config.js"></script><script defer src="js/auth.js"></script><script defer src="js/ui.js"></script><script defer src="js/service-guard.js"></script>
+</head><body><main class="shell"><a class="button" href="dashboard.html">กลับหน้ารวมบริการ</a><section class="panel"><h1>บริการใหม่</h1><div id="result">กำลังตรวจสอบสิทธิ์…</div></section></main>
+<script>document.addEventListener('portal:authorized',()=>{document.getElementById('result').textContent='พร้อมใช้งาน';/* Load real data only here; its API must enforce requireService_ too. */});</script>
+</body></html>

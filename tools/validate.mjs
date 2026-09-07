@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';
+const root=path.resolve(import.meta.dirname,'../web');let checks=0;
+function walk(dir){for(const d of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,d.name);if(d.isDirectory())walk(f);else if(d.name.endsWith('.js')){new vm.Script(fs.readFileSync(f,'utf8'),{filename:f});checks++;}else if(d.name.endsWith('.html')){const src=fs.readFileSync(f,'utf8');for(const m of src.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){if(m[2].trim())new vm.Script(m[2],{filename:f});}for(const m of src.matchAll(/(?:src|href)=["']([^"']+)["']/g)){if(/^(https?:|data:|#|mailto:)/.test(m[1]))continue;if(!fs.existsSync(path.resolve(path.dirname(f),m[1].split(/[?#]/)[0])))throw Error('Missing asset: '+f+' -> '+m[1]);}checks++;}}}
+walk(root);for(const f of ['Code.gs','Crypto.gs'])new vm.Script(fs.readFileSync(path.resolve(root,'../backend',f),'utf8'));
+console.log('PASS: syntax and local references;',checks,'web files');
